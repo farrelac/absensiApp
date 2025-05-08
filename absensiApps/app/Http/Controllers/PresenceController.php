@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\PresencesDataTable;
 use App\Models\Presence;
+use App\Models\PresenceDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -11,10 +13,11 @@ class PresenceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(PresencesDataTable $dataTables)
     {
-        $presences = Presence::all();
-        return view('pages.presence.index', compact('presences'));
+        // $presences = Presence::all();
+
+        return $dataTables->render('pages.presence.index');
     }
 
     /**
@@ -58,7 +61,9 @@ class PresenceController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $presence = Presence::findOrFail($id);
+        $presenceDetails = PresenceDetail::where('presence_id', $id)->get();
+        return view('pages.presence.detail.index', compact('presence', 'presenceDetails'));
     }
 
     /**

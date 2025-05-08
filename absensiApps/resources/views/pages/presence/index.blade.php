@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table table-striped">
+                {{-- <table id="datatable" class="table table-striped">
                     <thead>
                         <tr>
                             <th>No.</th>
@@ -42,6 +42,9 @@
                                 <td>{{ date('d-m-y', strtotime($presence->tgl_kegiatan)) }}</td>
                                 <td>{{ date('H:i', strtotime($presence->tgl_kegiatan)) }}</td>
                                 <td>
+                                    <a href="{{ route('presence.show', $presence->id) }}" class="btn btn-secondary">
+                                        Detail
+                                    </a>
                                     <a href="{{ route('presence.edit', $presence->id) }}" class="btn btn-warning">
                                         Edit
                                     </a>
@@ -58,8 +61,13 @@
                             </tr>
                         @endforeach
                     </tbody>
-                </table>
+                </table> --}}
+                {{ $dataTable->table() }}
             </div>
         </div>
     </div>
 @endsection
+
+@push('js')
+    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+@endpush
