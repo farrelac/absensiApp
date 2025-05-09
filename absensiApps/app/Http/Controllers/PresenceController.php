@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\PresenceDetailsDataTable;
 use App\DataTables\PresencesDataTable;
 use App\Models\Presence;
 use App\Models\PresenceDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use PhpParser\Node\Stmt\Foreach_;
 
 class PresenceController extends Controller
 {
@@ -59,11 +62,11 @@ class PresenceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id, PresenceDetailsDataTable $dataTables)
     {
         $presence = Presence::findOrFail($id);
-        $presenceDetails = PresenceDetail::where('presence_id', $id)->get();
-        return view('pages.presence.detail.index', compact('presence', 'presenceDetails'));
+        
+        return $dataTables->render('pages.presence.detail.index', compact('presence'));
     }
 
     /**
@@ -101,8 +104,19 @@ class PresenceController extends Controller
      */
     public function destroy(string $id)
     {
+        // Delete data detail absen
+        $presenceDetail = PresenceDetail::where('presence_id', $id)->get();
+        foreach ($presenceDetail as $pd) {
+            if ($pd->tanda_tangan) {
+                Storage::disk('public_uploads')->delete($pd->tanda_tangan);
+            }
+            $pd->delete();
+        }
+
+        // Delete kegiatan
         Presence::destroy($id);
 
-        return redirect()->route('presence.index');
+        return response()->json(['status' => 'success', 'message' => 'Data berhasil dihapus']);
     }
 }
+

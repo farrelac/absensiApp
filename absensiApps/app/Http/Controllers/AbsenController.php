@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\AbsenDataTable;
 use App\Models\Presence;
 use App\Models\PresenceDetail; // Import the PresenceDetail model
 use Illuminate\Http\Request;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Redirect;
 
 class AbsenController extends Controller
 {
-    public function index($slug)
+    public function index($slug, AbsenDataTable $dataTable)
     {
         $presence = Presence::where('slug', $slug)->first();
         if (!$presence) {
@@ -19,8 +20,7 @@ class AbsenController extends Controller
 
         // Ambil data detail kehadiran terkait dengan kehadiran ini
         $presenceDetails = PresenceDetail::where('presence_id', $presence->id)->get();
-
-        return view('pages.absen.index', compact('presence', 'presenceDetails')); // Kirim $presenceDetails ke view
+        return $dataTable->render('pages.absen.index', compact('presence'));
     }
 
     public function save(Request $request, string $id)

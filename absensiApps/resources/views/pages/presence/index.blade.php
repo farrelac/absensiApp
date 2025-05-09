@@ -18,50 +18,6 @@
                 </div>
             </div>
             <div class="card-body">
-                {{-- <table id="datatable" class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>Nama Kegiatan</th>
-                            <th>Tanggal Kegiatan</th>
-                            <th>Waktu Mulai</th>
-                            <th>Opsi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if ($presences->isEmpty())
-                            <tr>
-                                <td colspan="5" class="text-center">Tidak ada data!</td>
-                            </tr>
-                        @endIF
-
-                        @foreach ($presences as $presence)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $presence->nama_kegiatan }}</td>
-                                <td>{{ date('d-m-y', strtotime($presence->tgl_kegiatan)) }}</td>
-                                <td>{{ date('H:i', strtotime($presence->tgl_kegiatan)) }}</td>
-                                <td>
-                                    <a href="{{ route('presence.show', $presence->id) }}" class="btn btn-secondary">
-                                        Detail
-                                    </a>
-                                    <a href="{{ route('presence.edit', $presence->id) }}" class="btn btn-warning">
-                                        Edit
-                                    </a>
-                                    <form action="{{ route('presence.destroy', $presence->id) }}" method="post"
-                                        class="d-inline">
-                                        @csrf
-                                        @method('delete')
-                                        <button type="submit" class="btn btn-danger"
-                                            onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                                            Hapus
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table> --}}
                 {{ $dataTable->table() }}
             </div>
         </div>
@@ -70,4 +26,32 @@
 
 @push('js')
     {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+
+    <script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+        });
+
+        $(document).on('click', '.btn-delete', function(e) {
+            e.preventDefault();
+            let url = $(this).attr('href');
+
+            if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: url,
+                    success: function(data) {
+                        window.location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            }
+        });
+    </script>
 @endpush

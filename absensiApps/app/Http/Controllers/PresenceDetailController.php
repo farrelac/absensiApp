@@ -19,9 +19,8 @@ class PresenceDetailController extends Controller
             ->loadView('pages.presence.detail.export-pdf', compact('presence', 'presenceDetails'))
             ->setPaper('a4', 'landscape');
 
-        return $pdf->stream("{$presence->nama_kegiatan}.pdf", ['Attachment => 0']);
+        return $pdf->stream("{$presence->nama_kegiatan}.pdf", ['Attachment' => 0]); //Perbaikan pada array
 
-        exit();
     }
 
     public function destroy($id)
@@ -34,6 +33,6 @@ class PresenceDetailController extends Controller
 
         $presenceDetail->delete();
 
-        return redirect()->back();
+        return response()->json(['status' => 'success', 'message' => 'Data berhasil dihapus']);
     }
 }
