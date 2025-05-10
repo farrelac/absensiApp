@@ -58,7 +58,10 @@ class PresencesDataTable extends DataTable
         return $this->builder()
             ->setTableId('presences-table')
             ->columns($this->getColumns())
-            ->minifiedAjax()
+            ->ajax([
+                'url' => route('presence.index'), // route bawaan, otomatis HTTPS
+                'type' => 'GET',
+            ])
             ->orderBy(1)
             ->selectStyleSingle()
             ->buttons([
