@@ -8,8 +8,11 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use App\DataTables\PresenceDetailsDataTable;
 
+
 class PresenceDetailController extends Controller
 {
+
+    
     public function exportPdf(string $id)
     {
         $presence = Presence::findOrFail($id);
@@ -23,16 +26,14 @@ class PresenceDetailController extends Controller
         return $pdf->stream("{$presence->nama_kegiatan}.pdf", ['Attachment' => 0]); //Perbaikan pada array
 
     }
-
-public function data(PresenceDetailsDataTable $dataTable, $presence)
-{
-    // Pass the model, NOT the query builder
-    return $dataTable->query(new PresenceDetail())->where('presence_id', $presence)->toJson(); 
-
-    // OR, if you want to use dependency injection:
-    //return $dataTable->with('presence_id',$presence)->toJson();
-
-}
+ public function data(PresenceDetailsDataTable $dataTable)
+    {
+        // The PresenceDetailsDataTable service internally uses its `query()` method
+        // to get the base query (which includes the where('presence_id', ...))
+        // and then processes the AJAX request parameters (filtering, sorting, pagination).
+        // You simply need to tell the service to handle the request and return the JSON.
+        return $dataTable->toJson();
+    }
     public function destroy($id)
     {
         $presenceDetail = PresenceDetail::findOrFail($id);
