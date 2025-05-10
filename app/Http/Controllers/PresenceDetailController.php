@@ -26,14 +26,6 @@ class PresenceDetailController extends Controller
         return $pdf->stream("{$presence->nama_kegiatan}.pdf", ['Attachment' => 0]); //Perbaikan pada array
 
     }
- public function data(PresenceDetailsDataTable $dataTable)
-    {
-        // The PresenceDetailsDataTable service internally uses its `query()` method
-        // to get the base query (which includes the where('presence_id', ...))
-        // and then processes the AJAX request parameters (filtering, sorting, pagination).
-        // You simply need to tell the service to handle the request and return the JSON.
-        return $dataTable->toJson();
-    }
     public function destroy($id)
     {
         $presenceDetail = PresenceDetail::findOrFail($id);
