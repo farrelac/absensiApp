@@ -17,3 +17,5 @@ Route::get('presence-detail/export-pdf/{id}', [PresenceDetailController::class, 
 // Publik
 Route::get('absen/{slug}', [AbsenController::class, 'index'])->name('absen.index');
 Route::post('absen/{id}/save', [AbsenController::class, 'save'])->name('absen.save');
+
+Route::get('presence/{presence}/details/data', [PresenceDetailController::class, 'data'])->name('presencedetails.data'); // New route

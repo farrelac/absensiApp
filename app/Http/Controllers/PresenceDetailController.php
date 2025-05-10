@@ -6,6 +6,7 @@ use App\Models\Presence;
 use App\Models\PresenceDetail;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
+use App\DataTables\PresenceDetailsDataTable;
 
 class PresenceDetailController extends Controller
 {
@@ -21,6 +22,11 @@ class PresenceDetailController extends Controller
 
         return $pdf->stream("{$presence->nama_kegiatan}.pdf", ['Attachment' => 0]); //Perbaikan pada array
 
+    }
+
+      public function data(PresenceDetailsDataTable $dataTable, $presence) // Inject the DataTable
+    {
+        return $dataTable->query(PresenceDetail::where('presence_id', $presence))->toJson(); // Customize the query if needed
     }
 
     public function destroy($id)

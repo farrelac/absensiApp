@@ -59,11 +59,7 @@ class PresenceDetailsDataTable extends DataTable
         return $this->builder()
             ->setTableId('presencedetails-table')
             ->columns($this->getColumns())
-            ->ajax([
-                'url' => route('absen.index', $this->presenceSlug()),
-                'type' => 'GET',
-            ])
-
+            ->ajax(route('presencedetails.data', request()->route('presence')))
             ->orderBy(1)
             ->selectStyleSingle()
             ->buttons([
