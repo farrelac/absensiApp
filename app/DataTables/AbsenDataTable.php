@@ -59,7 +59,10 @@ class AbsenDataTable extends DataTable
         return $this->builder()
             ->setTableId('absen-table')
             ->columns($this->getColumns())
-            ->minifiedAjax()
+            ->ajax([
+            'url' => route('absen.index', request()->route('slug')), // Use named route - automatic HTTPS
+            'type' => 'GET',
+              ])
             ->orderBy(1)
             ->selectStyleSingle()
             ->buttons([
