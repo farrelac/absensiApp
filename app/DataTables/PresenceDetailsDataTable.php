@@ -51,7 +51,7 @@ class PresenceDetailsDataTable extends DataTable
         return $model->where('presence_id', $presenceId)->newQuery();
     }
 
-    /**
+    /**p
      * Optional method if you want to use the html builder.
      */
     public function html(): HtmlBuilder
@@ -59,7 +59,11 @@ class PresenceDetailsDataTable extends DataTable
         return $this->builder()
             ->setTableId('presencedetails-table')
             ->columns($this->getColumns())
-            ->minifiedAjax()
+            ->ajax([
+                'url' => route('absen.index', $this->presenceSlug()),
+                'type' => 'GET',
+            ])
+
             ->orderBy(1)
             ->selectStyleSingle()
             ->buttons([
@@ -102,5 +106,9 @@ class PresenceDetailsDataTable extends DataTable
     {
         return 'PresenceDetails_' . date('YmdHis');
     }
-}
 
+    protected function presenceSlug(): string
+    {
+        return request()->segment(2);
+    }
+}
