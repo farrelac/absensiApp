@@ -24,11 +24,15 @@ class PresenceDetailController extends Controller
 
     }
 
-      public function data(PresenceDetailsDataTable $dataTable, $presence) // Inject the DataTable
-    {
-        return $dataTable->query(PresenceDetail::where('presence_id', $presence))->toJson(); // Customize the query if needed
-    }
+public function data(PresenceDetailsDataTable $dataTable, $presence)
+{
+    // Pass the model, NOT the query builder
+    return $dataTable->query(new PresenceDetail())->where('presence_id', $presence)->toJson(); 
 
+    // OR, if you want to use dependency injection:
+    //return $dataTable->with('presence_id',$presence)->toJson();
+
+}
     public function destroy($id)
     {
         $presenceDetail = PresenceDetail::findOrFail($id);
